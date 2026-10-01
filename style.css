@@ -5432,33 +5432,13 @@ body.night .footer-text a:hover {
 
 
 @media (max-width: 760px) {
-    #weatherContent .main-grid > .current-box .sea-temperature.hidden {
-        display: none !important;
-    }
-
-    #weatherContent .main-grid > .current-box .current-icon {
-        height: 84px !important;
-        flex-basis: 84px !important;
-        font-size: 64px;
-    }
-
-    #weatherContent .main-grid > .current-box .current-details {
-        margin-top: 17px !important;
-    }
-
-    #weatherContent .main-grid > .current-box .detail-card {
-        min-height: 40px !important;
-    }
-
-    #weatherContent .main-grid > .current-box .sea-temperature {
-        min-height: 36px !important;
-    }
-}
-
-@media (max-width: 380px) {
     #weatherContent .main-grid > .current-box.mobile-section-visible {
         padding-top: 6px !important;
         padding-bottom: 10px !important;
+    }
+
+    #weatherContent .main-grid > .current-box .sea-temperature.hidden {
+        display: none !important;
     }
 
     #weatherContent .main-grid > .current-box .current-icon {
@@ -5477,5 +5457,9 @@ body.night .footer-text a:hover {
 
     #weatherContent .main-grid > .current-box .detail-card {
         min-height: 38px !important;
+    }
+
+    #weatherContent .main-grid > .current-box .sea-temperature {
+        min-height: 34px !important;
     }
 }
