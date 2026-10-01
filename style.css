@@ -4191,3 +4191,436 @@ body.night .footer-text a:hover {
         display: inline-block;
     }
 }
+
+```css
+/* =========================================================
+   YENİ MOBİL ARAYÜZ
+   Sadece 760px ve altı ekranlar için
+   Masaüstü tasarımına dokunmaz.
+   ========================================================= */
+
+@media (max-width: 760px) {
+
+    /* ANA KAPSAYICILAR */
+    html,
+    body {
+        width: 100%;
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+
+    .app {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 8px 8px 24px !important;
+        box-sizing: border-box !important;
+    }
+
+    .dashboard {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+    }
+
+    /* =====================================================
+       ANA HAVA DURUMU
+       ===================================================== */
+
+    .main-grid {
+        display: block !important;
+        width: 100% !important;
+        margin: 0 !important;
+    }
+
+    .main-grid > * {
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+    }
+
+    .main-grid > .current-box {
+        display: block !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        padding: 14px !important;
+        margin-bottom: 10px !important;
+        box-sizing: border-box !important;
+    }
+
+    /* Ana sıcaklık bölümü */
+    .current-main,
+    .current-weather,
+    .current-summary {
+        width: 100% !important;
+        min-width: 0 !important;
+        box-sizing: border-box !important;
+    }
+
+    .temperature {
+        font-size: 42px !important;
+        line-height: 1 !important;
+    }
+
+    .current-icon {
+        width: 64px !important;
+        height: 64px !important;
+    }
+
+    /* =====================================================
+       KÜÇÜK BİLGİ KARTLARI
+       ===================================================== */
+
+    .current-details {
+        display: grid !important;
+        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        gap: 6px !important;
+        margin-top: 12px !important;
+        box-sizing: border-box !important;
+    }
+
+    .detail-card {
+        width: 100% !important;
+        min-width: 0 !important;
+        min-height: 64px !important;
+        padding: 8px 5px !important;
+        margin: 0 !important;
+        box-sizing: border-box !important;
+        overflow: hidden !important;
+        text-align: center !important;
+    }
+
+    .detail-card * {
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    .detail-card .value,
+    .detail-card .detail-value {
+        font-size: 16px !important;
+        line-height: 1.15 !important;
+    }
+
+    .detail-card .label,
+    .detail-card .detail-label {
+        font-size: 10px !important;
+        line-height: 1.15 !important;
+    }
+
+    /* Deniz sıcaklığı */
+    .current-details .sea-temperature,
+    .sea-temperature {
+        grid-column: 1 / -1 !important;
+        width: 100% !important;
+        min-height: 48px !important;
+    }
+
+    /* =====================================================
+       7 GÜNLÜK TAHMİN
+       ===================================================== */
+
+    .forecast-box {
+        width: 100% !important;
+        min-width: 0 !important;
+        box-sizing: border-box !important;
+        overflow: hidden !important;
+    }
+
+    .forecast {
+        display: flex !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+        gap: 7px !important;
+        padding-bottom: 6px !important;
+        scrollbar-width: thin !important;
+    }
+
+    .forecast-day {
+        flex: 0 0 82px !important;
+        width: 82px !important;
+        min-width: 82px !important;
+        box-sizing: border-box !important;
+    }
+
+    /* =====================================================
+       SAATLİK TAHMİN
+       ===================================================== */
+
+    .hourly-forecast {
+        display: flex !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+        gap: 7px !important;
+        padding-bottom: 6px !important;
+        scrollbar-width: thin !important;
+    }
+
+    .hourly-card {
+        flex: 0 0 88px !important;
+        width: 88px !important;
+        min-width: 88px !important;
+        box-sizing: border-box !important;
+    }
+
+    /* =====================================================
+       ATMOSFER
+       ===================================================== */
+
+    .atmosphere-grid {
+        display: grid !important;
+        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        gap: 6px !important;
+    }
+
+    .atmosphere-item {
+        width: 100% !important;
+        min-width: 0 !important;
+        padding: 9px 5px !important;
+        box-sizing: border-box !important;
+        text-align: center !important;
+    }
+
+    /* =====================================================
+       RÜZGÂR
+       ===================================================== */
+
+    .wind-box {
+        width: 100% !important;
+        min-width: 0 !important;
+        box-sizing: border-box !important;
+        overflow: hidden !important;
+    }
+
+    .wind-content {
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        justify-content: space-around !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        gap: 10px !important;
+    }
+
+    .wind-compass {
+        flex: 0 0 125px !important;
+        width: 125px !important;
+        height: 125px !important;
+    }
+
+    .wind-info {
+        flex: 1 1 auto !important;
+        min-width: 0 !important;
+    }
+
+    /* =====================================================
+       GÜNEŞ / AY
+       ===================================================== */
+
+    .sun-times,
+    .moon-times {
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        width: 100% !important;
+        gap: 6px !important;
+    }
+
+    .sun-time-item,
+    .moon-times > div {
+        width: 100% !important;
+        min-width: 0 !important;
+        box-sizing: border-box !important;
+        padding: 9px 6px !important;
+    }
+
+    /* =====================================================
+       DAKİKALIK YAĞIŞ
+       ===================================================== */
+
+    .minute-rain,
+    .minute-rain-box {
+        width: 100% !important;
+        min-width: 0 !important;
+        box-sizing: border-box !important;
+        overflow: hidden !important;
+    }
+
+    /* Zaman çizelgesi yatay kaydırılabilir */
+    .minute-rain-timeline,
+    .rain-timeline {
+        width: 100% !important;
+        max-width: 100% !important;
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+    }
+
+    /* =====================================================
+       SICAKLIK GRAFİĞİ
+       ===================================================== */
+
+    .temperature-chart-box,
+    .temperature-chart,
+    .chart-box {
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+        overflow: hidden !important;
+    }
+
+    .temperature-chart canvas,
+    .chart-box canvas {
+        max-width: 100% !important;
+    }
+
+    /* =====================================================
+       HARİTA
+       ===================================================== */
+
+    .map-box {
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+        overflow: hidden !important;
+    }
+
+    .map,
+    #map {
+        width: 100% !important;
+        height: 260px !important;
+        min-height: 260px !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    /* =====================================================
+       POLEN
+       ===================================================== */
+
+    .pollen-forecast {
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        width: 100% !important;
+        gap: 6px !important;
+    }
+
+    .pollen-forecast > * {
+        min-width: 0 !important;
+    }
+
+    /* =====================================================
+       YAŞAM TARZI
+       ===================================================== */
+
+    .lifestyle-grid {
+        width: 100% !important;
+        min-width: 0 !important;
+    }
+
+    .lifestyle-items-grid {
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        width: 100% !important;
+        gap: 6px !important;
+    }
+
+    .lifestyle-item-card {
+        width: 100% !important;
+        min-width: 0 !important;
+        box-sizing: border-box !important;
+    }
+
+    /* =====================================================
+       UYARILAR
+       ===================================================== */
+
+    .alerts,
+    .alerts-box {
+        width: 100% !important;
+        min-width: 0 !important;
+        box-sizing: border-box !important;
+    }
+
+    /* =====================================================
+       GENEL TAŞMA KONTROLÜ
+       ===================================================== */
+
+    .dashboard *,
+    .main-grid *,
+    .current-box *,
+    .forecast-box *,
+    .wind-box *,
+    .map-box *,
+    .temperature-chart-box * {
+        max-width: 100%;
+    }
+
+    /* Uzun yazılar mobilde kutuyu büyütmesin */
+    .dashboard h1,
+    .dashboard h2,
+    .dashboard h3,
+    .dashboard p,
+    .dashboard span {
+        overflow-wrap: anywhere;
+    }
+
+    /* =====================================================
+       ÇOK KÜÇÜK TELEFONLAR
+       ===================================================== */
+
+    @media (max-width: 380px) {
+
+        .app {
+            padding-left: 6px !important;
+            padding-right: 6px !important;
+        }
+
+        .current-details {
+            gap: 5px !important;
+        }
+
+        .detail-card {
+            min-height: 58px !important;
+            padding: 7px 3px !important;
+        }
+
+        .detail-card .value,
+        .detail-card .detail-value {
+            font-size: 14px !important;
+        }
+
+        .atmosphere-grid {
+            gap: 5px !important;
+        }
+
+        .wind-compass {
+            flex-basis: 110px !important;
+            width: 110px !important;
+            height: 110px !important;
+        }
+
+        .forecast-day {
+            flex-basis: 76px !important;
+            width: 76px !important;
+            min-width: 76px !important;
+        }
+
+        .hourly-card {
+            flex-basis: 82px !important;
+            width: 82px !important;
+            min-width: 82px !important;
+        }
+    }
+}
+
+
