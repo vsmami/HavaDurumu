@@ -6557,7 +6557,7 @@ Masaüstüne dokunmaz.
 
 (function initMobileTabs() {
 
-```
+
 function setupMobileTabs() {
 
     const dashboard = document.getElementById("weatherContent");
@@ -6828,6 +6828,6 @@ if (document.readyState === "loading") {
     setupMobileTabs();
 
 }
-```
+
 
 })();
