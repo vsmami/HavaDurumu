@@ -1,0 +1,1225 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Hava Durumu</title>
+
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+
+    <link
+        rel="stylesheet"
+        href="style.css?v=weather-voice-20260929"
+    >
+
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        crossorigin=""
+    >
+
+</head>
+
+
+<body>
+
+    <div
+        id="weatherEffect"
+        class="weather-effect"
+    ></div>
+
+
+    <div
+        id="sun"
+        class="background-sun"
+    >
+        ☀️
+    </div>
+
+
+    <div
+        id="moon"
+        class="background-moon"
+    >
+        🌙
+    </div>
+
+
+    <div class="app">
+
+        <!-- =================================================
+             HEADER
+        ================================================== -->
+
+        <header class="header">
+
+            <div class="brand">
+
+                <div class="brand-icon">
+                    🌤️
+                </div>
+
+                <div>
+
+                    <h1>
+                        Hava Durumu
+                    </h1>
+
+                    <p>
+                        Anlık hava durumu ve detaylı tahmin
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="search-area">
+
+                <div class="search-wrapper">
+
+                    <input
+                        type="text"
+                        id="cityInput"
+                        placeholder="Şehir ara..."
+                        autocomplete="off"
+                    >
+
+                    <div
+                        id="citySuggestionBox"
+                        class="city-suggestion-box"
+                    ></div>
+
+                </div>
+
+
+                <button
+                    class="search-btn"
+                    onclick="getWeather()"
+                >
+                    🔍 Ara
+                </button>
+
+
+                <button
+                    class="location-btn"
+                    onclick="getMyLocation()"
+                >
+                    📍 Konumumu Kullan
+                </button>
+
+                <div class="unit-controls" aria-label="Birim tercihleri">
+                    <div class="unit-field">
+                        <label for="temperatureUnitSelect">Sıcaklık</label>
+                        <select id="temperatureUnitSelect" aria-label="Sıcaklık birimi">
+                            <option value="celsius">°C</option>
+                            <option value="fahrenheit">°F</option>
+                        </select>
+                    </div>
+                    <div class="unit-field">
+                        <label for="windUnitSelect">Rüzgâr</label>
+                        <select id="windUnitSelect" aria-label="Rüzgâr hızı birimi">
+                            <option value="kmh">km/sa</option>
+                            <option value="mph">mil/sa</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button id="openGlobeButton" class="globe-open-button" type="button">🌐 3D Dünya</button>
+
+            </div>
+
+        </header>
+
+
+        <section class="saved-cities-container" aria-label="Favori şehirler">
+            <div class="saved-cities-toolbar">
+                <button id="currentFavoriteButton" class="current-favorite-btn" type="button" disabled aria-pressed="false">
+                    ☆ Favorilere ekle
+                </button>
+                <button id="savedCitiesToggle" class="saved-cities-toggle" type="button" aria-expanded="false" aria-controls="savedCitiesPanel">
+                    ⭐ Favori şehirler <span id="favoriteCityCount">0</span>
+                </button>
+            </div>
+            <div id="savedCitiesPanel" class="saved-cities-panel" role="region" aria-label="Kaydedilen favori şehirler">
+                <div class="saved-cities-section">
+                    <div class="saved-cities-section-header">
+                        <strong>Favori şehirler</strong>
+                    </div>
+                    <div id="savedCitiesList" class="saved-cities-list"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- =================================================
+             WELCOME
+        ================================================== -->
+
+        <section
+            id="welcome"
+            class="welcome"
+        >
+
+            <div class="welcome-icon">
+                🌍
+            </div>
+
+            <h2>
+                Hava durumunu öğren
+            </h2>
+
+            <p>
+                Bir şehir adı yaz veya konumunu kullan.
+            </p>
+
+            <p>
+                Sıcaklık, yağış, rüzgâr, hava kalitesi,
+                güneş, ay ve daha fazlasını görüntüle.
+            </p>
+
+        </section>
+
+
+        <!-- =================================================
+             DASHBOARD
+        ================================================== -->
+
+        <main
+            id="weatherContent"
+            class="dashboard hidden"
+        >
+
+            <section class="city-title">
+
+                <div>
+
+                    <h2 id="cityName">
+                        --
+                    </h2>
+
+                    <div
+                        id="localTime"
+                        class="local-time"
+                    >
+                        --:--:--
+                    </div>
+                    <small id="weatherDataStatus" class="weather-data-status" hidden></small>
+
+                </div>
+
+                <div class="city-title-right">
+
+                    <button
+                        id="voiceBulletinBtn"
+                        class="voice-bulletin-btn"
+                        aria-label="Hava durumunu sesli dinle"
+                        title="Hava durumunu sesli dinle"
+                        hidden
+                    >
+                        <span class="voice-btn-icon">🔊</span>
+                        <span class="voice-btn-text">Dinle</span>
+                    </button>
+
+                    <div class="city-live">
+
+                        <span class="live-dot"></span>
+
+                        Canlı hava durumu
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 AKILLI METEOROLOJİK UYARILAR
+            ================================================== -->
+
+            <div
+                id="weatherAlertsContainer"
+                class="weather-alerts-container"
+                role="region"
+                aria-label="Meteorolojik Uyarılar"
+                hidden
+            ></div>
+
+
+            <!-- =================================================
+                 ANA HAVA
+            ================================================== -->
+
+            <div class="main-grid">
+
+
+                <section class="weather-box current-box">
+
+                    <div class="box-title">
+                        Şu an
+                    </div>
+
+
+                    <div class="current-weather">
+
+                        <div class="current-icon">
+
+                            <span id="weatherIcon">
+                                🌤️
+                            </span>
+
+                        </div>
+
+
+                        <div class="current-main">
+
+                            <div
+                                id="temperature"
+                                class="temperature"
+                            >
+                                --
+                            </div>
+
+                            <div
+                                id="description"
+                                class="description"
+                            >
+                                --
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="current-details">
+
+
+                        <div class="detail-card">
+
+                            <span class="detail-icon">
+                                💧
+                            </span>
+
+                            <span class="detail-label">
+                                Nem
+                            </span>
+
+                            <strong id="humidity">
+                                --%
+                            </strong>
+
+                        </div>
+
+
+                        <div class="detail-card">
+
+                            <span class="detail-icon">
+                                🌬️
+                            </span>
+
+                            <span class="detail-label">
+                                Rüzgâr
+                            </span>
+
+                            <strong id="wind">
+                                -- km/sa
+                            </strong>
+
+                        </div>
+
+
+                        <div class="detail-card">
+
+                            <span class="detail-icon">
+                                🌡️
+                            </span>
+
+                            <span class="detail-label">
+                                Hissedilen
+                            </span>
+
+                            <strong id="feelsLike">
+                                --°
+                            </strong>
+
+                        </div>
+
+
+                        <div class="detail-card">
+
+                            <span class="detail-icon">
+                                ⛰️
+                            </span>
+
+                            <span class="detail-label">
+                                Rakım
+                            </span>
+
+                            <strong id="elevation">
+                                -- m
+                            </strong>
+
+                        </div>
+
+
+                        <div class="detail-card">
+
+                            <span class="detail-icon">
+                                🌧️
+                            </span>
+
+                            <span class="detail-label">
+                                Anlık yağış
+                            </span>
+
+                            <strong id="rainAmount">
+                                -- mm
+                            </strong>
+
+                        </div>
+
+
+                        <div class="detail-card">
+
+                            <span class="detail-icon">
+                                ☔
+                            </span>
+
+                            <span class="detail-label">
+                                Bugün yağış
+                            </span>
+
+                            <strong id="todayRainAmount">
+                                -- mm
+                            </strong>
+
+                        </div>
+
+
+                        <div
+                            id="sea-temperature"
+                            class="detail-card sea-temperature hidden"
+                        >
+                            🌊 Deniz --°C
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- =================================================
+                     7 GÜN
+                ================================================== -->
+
+                <section class="weather-box forecast-box">
+
+                    <div class="box-title">
+                        7 Günlük Tahmin
+                    </div>
+
+
+                    <div
+                        id="forecast"
+                        class="forecast"
+                    ></div>
+
+                </section>
+
+            </div>
+
+
+            <!-- =================================================
+                 BUGÜN NE GİYSEM & YAŞAM REHBERİ
+            ================================================== -->
+
+            <section class="weather-box lifestyle-box" id="lifestyleBox" aria-labelledby="lifestyleTitle">
+
+                <div class="lifestyle-header">
+                    <div>
+                        <div class="box-title" id="lifestyleTitle">
+                            👕 Bugün Ne Giysem? & Yaşam Rehberi
+                        </div>
+                        <p class="lifestyle-subtitle">
+                            Hissedilen sıcaklık, rüzgâr ve yağış durumuna göre anlık tavsiyeler
+                        </p>
+                    </div>
+                    <span id="lifestyleStatusBadge" class="lifestyle-badge">
+                        🌤️ Rehber yükleniyor…
+                    </span>
+                </div>
+
+                <div class="lifestyle-banner">
+                    <div class="lifestyle-banner-icon" id="clothingMainIcon">
+                        🧥
+                    </div>
+                    <div class="lifestyle-banner-body">
+                        <strong id="clothingMainAdvice" class="lifestyle-main-advice">
+                            Günün tavsiyesi hazırlanıyor…
+                        </strong>
+                        <p id="clothingDetailAdvice" class="lifestyle-detail-advice">
+                            Hava durumu verileri analiz ediliyor.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="lifestyle-items-grid">
+
+                    <div class="lifestyle-item-card">
+                        <span class="lifestyle-item-icon" id="wearTopIcon">👔</span>
+                        <div class="lifestyle-item-meta">
+                            <span class="lifestyle-item-label">Üst Giyim</span>
+                            <strong id="wearTopText" class="lifestyle-item-val">--</strong>
+                        </div>
+                    </div>
+
+                    <div class="lifestyle-item-card">
+                        <span class="lifestyle-item-icon" id="wearBottomIcon">👖</span>
+                        <div class="lifestyle-item-meta">
+                            <span class="lifestyle-item-label">Alt & Ayakkabı</span>
+                            <strong id="wearBottomText" class="lifestyle-item-val">--</strong>
+                        </div>
+                    </div>
+
+                    <div class="lifestyle-item-card">
+                        <span class="lifestyle-item-icon" id="wearRainIcon">☂️</span>
+                        <div class="lifestyle-item-meta">
+                            <span class="lifestyle-item-label">Yağış Koruması</span>
+                            <strong id="wearRainText" class="lifestyle-item-val">--</strong>
+                        </div>
+                    </div>
+
+                    <div class="lifestyle-item-card">
+                        <span class="lifestyle-item-icon" id="wearSunIcon">🕶️</span>
+                        <div class="lifestyle-item-meta">
+                            <span class="lifestyle-item-label">Güneş & Aksesuar</span>
+                            <strong id="wearSunText" class="lifestyle-item-val">--</strong>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="lifestyle-activities">
+                    <div class="lifestyle-activities-header">
+                        <h4>Açık Hava & Günlük Yaşam Endeksi</h4>
+                        <span>10 puan üzerinden</span>
+                    </div>
+
+                    <div class="activities-grid">
+
+                        <div class="activity-card">
+                            <div class="activity-header">
+                                <span class="activity-icon">🏃‍♂️</span>
+                                <div class="activity-title-group">
+                                    <strong>Koşu & Açık Hava Sporu</strong>
+                                    <small id="actRunningTip">Değerlendiriliyor…</small>
+                                </div>
+                                <span id="actRunningScore" class="activity-score">--/10</span>
+                            </div>
+                            <div class="activity-bar-track">
+                                <div id="actRunningBar" class="activity-bar-fill"></div>
+                            </div>
+                        </div>
+
+                        <div class="activity-card">
+                            <div class="activity-header">
+                                <span class="activity-icon">🚗</span>
+                                <div class="activity-title-group">
+                                    <strong>Araba Yıkama</strong>
+                                    <small id="actCarWashTip">Değerlendiriliyor…</small>
+                                </div>
+                                <span id="actCarWashScore" class="activity-score">--/10</span>
+                            </div>
+                            <div class="activity-bar-track">
+                                <div id="actCarWashBar" class="activity-bar-fill"></div>
+                            </div>
+                        </div>
+
+                        <div class="activity-card">
+                            <div class="activity-header">
+                                <span class="activity-icon">🧺</span>
+                                <div class="activity-title-group">
+                                    <strong>Çamaşır Kurutma</strong>
+                                    <small id="actLaundryTip">Değerlendiriliyor…</small>
+                                </div>
+                                <span id="actLaundryScore" class="activity-score">--/10</span>
+                            </div>
+                            <div class="activity-bar-track">
+                                <div id="actLaundryBar" class="activity-bar-fill"></div>
+                            </div>
+                        </div>
+
+                        <div class="activity-card">
+                            <div class="activity-header">
+                                <span class="activity-icon">🪟</span>
+                                <div class="activity-title-group">
+                                    <strong>Ev Havalandırma</strong>
+                                    <small id="actVentilationTip">Değerlendiriliyor…</small>
+                                </div>
+                                <span id="actVentilationScore" class="activity-score">--/10</span>
+                            </div>
+                            <div class="activity-bar-track">
+                                <div id="actVentilationBar" class="activity-bar-fill"></div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </section>
+
+
+            <section class="weather-box minute-rain-box" aria-labelledby="minuteRainTitle">
+                <div class="minute-rain-heading">
+                    <div>
+                        <div class="box-title" id="minuteRainTitle">Yakın Saatlerde Yağış</div>
+                        <p class="minute-rain-subtitle">Önümüzdeki 2 saat · 15 dakikalık tahmin adımları</p>
+                    </div>
+                    <span class="minute-rain-badge">🌧️ Kısa vadeli</span>
+                </div>
+                <p id="minuteRainSummary" class="minute-rain-summary" aria-live="polite">Tahmin yükleniyor…</p>
+                <div id="minuteRainTimeline" class="minute-rain-timeline" aria-label="Önümüzdeki iki saatin yağış tahmini"></div>
+                <p class="minute-rain-note">Tahmin aralığı ve ayrıntı seviyesi konuma göre değişebilir.</p>
+            </section>
+
+            <!-- =================================================
+                 ATMOSFER
+            ================================================== -->
+
+            <section class="weather-box atmosphere-box">
+
+                <div class="box-title">
+                    Atmosfer
+                </div>
+
+
+                <div class="atmosphere-grid">
+
+
+                    <div class="atmosphere-item">
+
+                        <span class="atmosphere-icon">
+                            ☀️
+                        </span>
+
+                        <span class="atmosphere-label">
+                            UV Endeksi
+                        </span>
+
+                        <strong id="uvIndex">
+                            --
+                        </strong>
+
+                        <small id="uvDescription">
+                            --
+                        </small>
+
+                    </div>
+
+
+                    <div class="atmosphere-item">
+
+                        <span class="atmosphere-icon">
+                            🌫️
+                        </span>
+
+                        <span class="atmosphere-label">
+                            Hava Kalitesi
+                        </span>
+
+                        <strong id="airQuality">
+                            --
+                        </strong>
+
+                        <small id="airQualityDescription">
+                            --
+                        </small>
+
+                    </div>
+
+
+                    <div class="atmosphere-item">
+
+                        <span class="atmosphere-icon">
+                            🫁
+                        </span>
+
+                        <span class="atmosphere-label">
+                            PM2.5
+                        </span>
+
+                        <strong id="pm25">
+                            --
+                        </strong>
+
+                        <small>
+                            µg/m³
+                        </small>
+
+                    </div>
+
+
+                    <div class="atmosphere-item">
+
+                        <span class="atmosphere-icon">
+                            🌫️
+                        </span>
+
+                        <span class="atmosphere-label">
+                            PM10
+                        </span>
+
+                        <strong id="pm10">
+                            --
+                        </strong>
+
+                        <small>
+                            µg/m³
+                        </small>
+
+                    </div>
+
+
+                    <div class="atmosphere-item">
+
+                        <span class="atmosphere-icon">
+                            🎚️
+                        </span>
+
+                        <span class="atmosphere-label">
+                            Basınç
+                        </span>
+
+                        <strong id="pressure">
+                            --
+                        </strong>
+
+                        <small>
+                            hPa
+                        </small>
+
+                    </div>
+
+                </div>
+
+                <section class="pollen-section" aria-labelledby="pollenTitle">
+                    <div class="pollen-heading">
+                        <div>
+                            <h3 id="pollenTitle">Polen Tahmini</h3>
+                            <p>Ücretsiz kaynak · 4 günlük görünüm</p>
+                        </div>
+                        <span class="pollen-source-badge">Open-Meteo</span>
+                    </div>
+                    <p id="pollenAvailability" class="pollen-availability" aria-live="polite">Polen verisi aranıyor…</p>
+                    <div id="pollenForecast" class="pollen-forecast"></div>
+                    <p class="pollen-note">Kapsama yalnızca Avrupa’da polen sezonunda bulunabilir. Bu bölüm klinik ölçüm değildir.</p>
+                </section>
+
+            </section>
+
+
+            <!-- =================================================
+                 RÜZGÂR
+            ================================================== -->
+
+            <section class="weather-box wind-box">
+
+                <div class="box-title">
+                    Rüzgâr
+                </div>
+
+
+                <div class="wind-content">
+
+                    <div class="wind-compass">
+
+                        <div class="compass-mark compass-n">
+                            K
+                        </div>
+
+                        <div class="compass-mark compass-e">
+                            D
+                        </div>
+
+                        <div class="compass-mark compass-s">
+                            G
+                        </div>
+
+                        <div class="compass-mark compass-w">
+                            B
+                        </div>
+
+                        <div
+                            id="windArrow"
+                            class="wind-arrow"
+                        >
+                            ↑
+                        </div>
+
+                    </div>
+
+
+                    <div class="wind-info">
+
+                        <div
+                            id="windDirection"
+                            class="wind-direction"
+                        >
+                            --
+                        </div>
+
+                        <div
+                            id="windDegrees"
+                            class="wind-degrees"
+                        >
+                            --°
+                        </div>
+
+                        <div class="wind-speed">
+
+                            <strong id="windSpeedLarge">
+                                --
+                            </strong>
+
+                            <span id="windSpeedUnit">km/sa</span>
+
+                        </div>
+
+                        <div
+                            id="windDescription"
+                            class="wind-description"
+                        >
+                            --
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 SICAKLIK GRAFİĞİ
+            ================================================== -->
+
+            <section class="weather-box temperature-chart-box">
+
+                <div class="box-title">
+                    24 Saatlik Sıcaklık
+                </div>
+
+
+                <div
+                    id="temperatureChart"
+                    class="temperature-chart"
+                ></div>
+
+            </section>
+
+
+            <!-- =================================================
+                 24 SAAT
+            ================================================== -->
+
+            <section class="weather-box hourly-box">
+
+                <div class="box-title">
+                    24 Saatlik Tahmin
+                </div>
+
+
+                <div
+                    id="hourlyForecast"
+                    class="hourly-forecast"
+                ></div>
+
+            </section>
+
+
+            <!-- =================================================
+                 GÜNEŞ
+            ================================================== -->
+
+            <section class="weather-box sun-box">
+
+                <div class="box-title">
+                    Güneş
+                </div>
+
+
+                <div class="sun-info">
+
+                    <div class="sun-times">
+
+                        <div class="sun-time-item">
+
+                            <span>
+                                🌅 Doğuş
+                            </span>
+
+                            <strong id="sunrise">
+                                --:--
+                            </strong>
+
+                        </div>
+
+
+                        <div class="sun-time-item">
+
+                            <span>
+                                🌇 Batış
+                            </span>
+
+                            <strong id="sunset">
+                                --:--
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        id="sunStatus"
+                        class="sun-status"
+                    >
+                        --
+                    </div>
+
+
+                    <div class="sun-animation">
+
+                        <div class="sun-horizon"></div>
+
+                        <div
+                            id="movingSun"
+                            class="moving-sun"
+                        >
+                            ☀️
+                        </div>
+
+                    </div>
+
+
+                    <div class="sun-progress-container">
+
+                        <div
+                            id="sunProgress"
+                            class="sun-progress"
+                        ></div>
+
+                    </div>
+
+
+                    <div
+                        id="sunMessage"
+                        class="sun-message"
+                    >
+                        --
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 AY
+            ================================================== -->
+
+            <section class="weather-box moon-box">
+
+                <div class="box-title">
+                    Ay
+                </div>
+
+
+                <div class="moon-content">
+
+                    <div
+                        id="moonPhaseIcon"
+                        class="moon-phase-icon"
+                    >
+                        🌙
+                    </div>
+
+
+                    <div
+                        id="moonPhaseName"
+                        class="moon-phase-name"
+                    >
+                        --
+                    </div>
+
+
+                    <div
+                        id="moonIllumination"
+                        class="moon-illumination"
+                    >
+                        Aydınlık: --%
+                    </div>
+
+
+                    <div class="moon-times">
+
+                        <div>
+
+                            <span>
+                                🌙 Ay doğuşu
+                            </span>
+
+                            <strong id="moonrise">
+                                --:--
+                            </strong>
+
+                        </div>
+
+
+                        <div>
+
+                            <span>
+                                🌘 Ay batışı
+                            </span>
+
+                            <strong id="moonset">
+                                --:--
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 HARİTA
+            ================================================== -->
+
+            <section class="weather-box map-box">
+
+                <div class="map-header">
+
+                    <div class="box-title">
+                        Konum Haritası
+                    </div>
+
+
+                    <div class="map-controls">
+
+                        <button
+                            id="mapStandardButton"
+                            class="map-style-btn active"
+                            onclick="setMapStyle('standard')"
+                        >
+                            🗺️ Standart
+                        </button>
+
+
+                        <button
+                            id="mapSatelliteButton"
+                            class="map-style-btn"
+                            onclick="setMapStyle('satellite')"
+                        >
+                            🛰️ Uydu
+                        </button>
+
+                        <button
+                            id="weatherSatelliteButton"
+                            class="map-style-btn"
+                            type="button"
+                            aria-pressed="false"
+                            title="Ücretsiz NASA / EUMETSAT meteoroloji uydusu"
+                        >
+                            ☁️ Canlı uydu
+                        </button>
+
+
+                        <button
+                            class="map-style-btn"
+                            onclick="recenterMap()"
+                        >
+                            📍 Konuma Git
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    id="mapInfo"
+                    class="map-info"
+                >
+                    --
+                </div>
+
+                <div class="weather-map-toolbar">
+                    <div class="weather-layer-buttons" aria-label="Hava haritası katmanları">
+                        <button id="rainLayerButton" class="map-style-btn weather-layer-toggle" type="button" aria-pressed="false">🌧️ Yağış tahmini</button>
+                        <button id="cloudLayerButton" class="map-style-btn weather-layer-toggle" type="button" aria-pressed="false">☁️ Bulut</button>
+                        <button id="temperatureLayerButton" class="map-style-btn weather-layer-toggle" type="button" aria-pressed="false">🌡️ Sıcaklık</button>
+                        <button id="radarLayerButton" class="map-style-btn weather-layer-toggle" type="button" aria-pressed="false">📡 Geçmiş radar</button>
+                    </div>
+                    <div id="weatherForecastTimeline" class="weather-forecast-timeline" hidden>
+                        <button id="weatherForecastPlayButton" class="radar-play-button" type="button" aria-label="Tahmini oynat">▶</button>
+                        <input id="weatherForecastSlider" type="range" min="0" max="48" step="1" value="0" aria-label="Hava durumu tahmin saati">
+                        <span id="weatherForecastTime">Şimdi</span>
+                    </div>
+                    <div id="radarTimeline" class="radar-timeline" hidden>
+                        <button id="radarPlayButton" class="radar-play-button" type="button" aria-label="Radarı oynat">▶</button>
+                        <input id="radarFrameSlider" type="range" min="0" max="0" value="0" aria-label="Radar zamanı">
+                        <span id="radarFrameTime">Radar bekleniyor…</span>
+                    </div>
+                    <div id="weatherSatelliteTimeline" class="weather-satellite-timeline" hidden>
+                        <div class="weather-satellite-status-row">
+                            <strong>☁️ Uydu bulut görüntüsü</strong>
+                            <span id="weatherSatelliteStatus" role="status" aria-live="polite">Görüntü zamanı hazırlanıyor…</span>
+                        </div>
+                        <div class="weather-satellite-controls">
+                            <button id="weatherSatellitePrev" class="satellite-time-button" type="button" aria-label="Önceki görüntü">−20 dk</button>
+                            <input id="weatherSatelliteTime" type="range" min="0" max="36" value="36" step="1" aria-label="Uydu görüntüsü zamanı">
+                            <button id="weatherSatelliteNext" class="satellite-time-button" type="button" aria-label="Sonraki görüntü">+20 dk</button>
+                            <button id="weatherSatellitePlay" class="satellite-time-button satellite-play-button" type="button" aria-pressed="false">▶ Oynat</button>
+                            <button id="weatherSatelliteLatest" class="satellite-time-button" type="button">En yeni</button>
+                        </div>
+                        <div class="satellite-timeline-caption">
+                            <span>Türkiye / Avrupa / Afrika · son 12 saat · 20 dakikada bir</span>
+                            <span>Kaynak: EUMETSAT GeoColour / NASA</span>
+                        </div>
+                    </div>
+                    <div id="weatherMapLegend" class="weather-map-legend" hidden></div>
+                    <div id="weatherMapStatus" class="weather-map-status" role="status" aria-live="polite"></div>
+                </div>
+
+
+                <div
+                    id="map"
+                    class="map"
+                ></div>
+
+            </section>
+
+
+            <!-- =================================================
+                 RADAR
+            ================================================== -->
+
+            <section class="weather-box rain-radar-box">
+
+                <div class="box-title">
+                    Yağış Radarı
+                </div>
+
+
+                <div class="radar-content">
+
+                    <div class="radar-icon">
+                        🌧️
+                    </div>
+
+                    <h3>
+                        Canlı Yağış Radarı
+                    </h3>
+
+                    <p>
+                        Yağışların hareketini harita üzerinden
+                        canlı olarak takip edebilirsin.
+                    </p>
+
+                    <a
+                        href="https://zoom.earth/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="radar-button"
+                    >
+                        🌍 Radarı Aç
+                    </a>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+
+    <script
+        src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        crossorigin=""
+    ></script>
+
+
+    <script src="script.js?v=weather-voice-20260929"></script>
+   
+    <div id="globeModal" class="globe-modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="globeTitle">
+        <section class="globe-dialog">
+            <header class="globe-dialog-header">
+                <div class="globe-heading">
+                    <span class="globe-heading-icon">🌐</span>
+                    <div>
+                        <p class="globe-eyebrow">CANLI KONUM GÖRÜNÜMÜ</p>
+                        <h2 id="globeTitle">Dünya</h2>
+                    </div>
+                </div>
+                <div class="globe-header-actions">
+                    <span class="globe-live"><i></i> CANLI GÜNDÜZ / GECE</span>
+                    <button id="closeGlobeButton" class="globe-close-button" type="button" aria-label="Kapat">✕</button>
+                </div>
+            </header>
+
+            <div class="globe-stage">
+                <div id="globeContainer" class="globe-container" aria-label="Etkileşimli 3D Dünya"></div>
+                <div id="globeLoading" class="globe-loading">
+                    <span class="globe-spinner"></span>
+                    <strong id="globeLoadingText">3D Dünya yükleniyor…</strong>
+                    <small>Yüklenmesi birkaç saniye sürebilir.</small>
+                </div>
+                <div id="globeError" class="globe-error is-hidden">
+                    <span>⚠️</span>
+                    <strong>Dünya görüntüsü yüklenemedi</strong>
+                    <small id="globeErrorDetail">İnternet bağlantını kontrol edip tekrar dene.</small>
+                    <button id="globeRetryButton" type="button">Tekrar dene</button>
+                </div>
+                <div class="globe-hint">Sürükle: döndür <b>•</b> Tekerlek: yakınlaştır</div>
+                <div class="globe-daynight-legend">
+                    <span><i class="legend-day"></i> Gündüz</span>
+                    <span><i class="legend-twilight"></i> Alacakaranlık</span>
+                    <span><i class="legend-night"></i> Gece</span>
+                </div>
+            </div>
+
+            <footer class="globe-footer">
+                <div class="globe-location-summary">
+                    <span class="globe-location-pin">⌖</span>
+                    <div class="globe-location-text">
+                        <strong id="globeCurrentCity">Konum seçilmedi</strong>
+                        <span id="globeCoordinates">Önce bir şehir ara</span>
+                    </div>
+                </div>
+                <div class="globe-weather-summary">
+                    <span>Şu an</span>
+                    <strong id="globeCurrentTemp">--°</strong>
+                </div>
+                <div id="globeStatusText" class="globe-status-text">Güneş konumu hesaplanıyor…</div>
+                <div class="globe-controls">
+                    <button id="globeLocateButton" class="globe-control-button" type="button">◎ Konumuma git</button>
+                    <button id="globeRotateButton" class="globe-control-button" type="button" aria-pressed="false">↻ Otomatik döndür</button>
+                </div>
+            </footer>
+        </section>
+    </div>
+</body>
+</html>
