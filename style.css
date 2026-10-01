@@ -5380,3 +5380,52 @@ body.night .footer-text a:hover {
         animation: none !important;
     }
 }
+
+
+@media (max-width: 760px) {
+    .search-area {
+        grid-template-columns: minmax(0, 1fr) 38px 38px !important;
+    }
+
+    .search-area .search-wrapper {
+        grid-column: 1;
+        min-width: 0;
+    }
+
+    .search-area input {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .search-area button:not(.globe-open-button) {
+        grid-row: 1;
+        font-size: 0 !important;
+    }
+
+    .search-btn { grid-column: 2; }
+    .location-btn { grid-column: 3; }
+
+    .search-area .unit-controls,
+    .search-area .globe-open-button {
+        grid-column: 1 / -1;
+    }
+
+    .search-area .globe-open-button {
+        width: 100%;
+    }
+
+    #weatherContent .main-grid > .current-box.mobile-section-visible {
+        border: 0 !important;
+        border-radius: 0 !important;
+    }
+
+    #weatherContent .main-grid > .current-box .sea-temperature {
+        display: flex !important;
+        grid-column: 1 / -1;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        min-height: 38px !important;
+        white-space: nowrap;
+    }
+}
