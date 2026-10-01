@@ -6548,3 +6548,286 @@ document.addEventListener(
         }, 800); 
     } 
 ); 
+
+/* =========================================================
+MOBİL SEKME SİSTEMİ
+Sadece 760px ve altındaki ekranlarda çalışır.
+Masaüstüne dokunmaz.
+========================================================= */
+
+(function initMobileTabs() {
+
+```
+function setupMobileTabs() {
+
+    const dashboard = document.getElementById("weatherContent");
+
+    if (!dashboard) return;
+
+    /* Daha önce oluşturulduysa tekrar oluşturma */
+    if (document.getElementById("mobileTabs")) return;
+
+    const tabs = document.createElement("div");
+
+    tabs.id = "mobileTabs";
+    tabs.className = "mobile-tabs";
+
+    tabs.innerHTML = `
+        <button class="mobile-tab active" data-tab="general">
+            ☀️ Genel
+        </button>
+
+        <button class="mobile-tab" data-tab="forecast">
+            📅 Tahmin
+        </button>
+
+        <button class="mobile-tab" data-tab="atmosphere">
+            🌫️ Atmosfer
+        </button>
+
+        <button class="mobile-tab" data-tab="wind">
+            💨 Rüzgâr
+        </button>
+
+        <button class="mobile-tab" data-tab="sun">
+            🌅 Güneş & Ay
+        </button>
+
+        <button class="mobile-tab" data-tab="map">
+            🗺️ Harita
+        </button>
+    `;
+
+    /*
+     * Sekmeleri şehir başlığının hemen altına koy.
+     */
+    const cityTitle = dashboard.querySelector(".city-title");
+
+    if (cityTitle) {
+        cityTitle.insertAdjacentElement("afterend", tabs);
+    } else {
+        dashboard.prepend(tabs);
+    }
+
+    /*
+     * Ana bölümleri bul
+     */
+    const currentBox = dashboard.querySelector(".current-box");
+    const forecastBox = dashboard.querySelector(".forecast-box");
+
+    const lifestyleBox = dashboard.querySelector(".lifestyle-box");
+    const minuteRainBox = dashboard.querySelector(".minute-rain-box");
+
+    const atmosphereBox = dashboard.querySelector(".atmosphere-box");
+    const windBox = dashboard.querySelector(".wind-box");
+
+    const temperatureChartBox =
+        dashboard.querySelector(".temperature-chart-box");
+
+    const hourlyBox =
+        dashboard.querySelector(".hourly-box");
+
+    const sunBox =
+        dashboard.querySelector(".sun-box");
+
+    const moonBox =
+        dashboard.querySelector(".moon-box");
+
+    const mapBox =
+        dashboard.querySelector(".map-box");
+
+    const radarBox =
+        dashboard.querySelector(".rain-radar-box");
+
+    const weatherColorBox =
+        dashboard.querySelector("#weatherColorBox");
+
+    const alertsBox =
+        dashboard.querySelector("#weatherAlertsContainer");
+
+
+    /*
+     * Sekmelere ait bölümleri belirle
+     */
+    const sections = {
+
+        general: [
+            currentBox,
+            lifestyleBox,
+            minuteRainBox,
+            alertsBox,
+            weatherColorBox
+        ],
+
+        forecast: [
+            forecastBox,
+            temperatureChartBox,
+            hourlyBox
+        ],
+
+        atmosphere: [
+            atmosphereBox
+        ],
+
+        wind: [
+            windBox
+        ],
+
+        sun: [
+            sunBox,
+            moonBox
+        ],
+
+        map: [
+            mapBox,
+            radarBox
+        ]
+    };
+
+
+    /*
+     * Tüm bölümleri gizle
+     */
+    function hideAllSections() {
+
+        Object.values(sections).flat().forEach(section => {
+
+            if (!section) return;
+
+            section.classList.remove("mobile-section-visible");
+            section.classList.add("mobile-section-hidden");
+
+        });
+    }
+
+
+    /*
+     * Seçilen sekmeyi göster
+     */
+    function showTab(tabName) {
+
+        hideAllSections();
+
+        const selectedSections = sections[tabName] || [];
+
+        selectedSections.forEach(section => {
+
+            if (!section) return;
+
+            section.classList.remove("mobile-section-hidden");
+            section.classList.add("mobile-section-visible");
+
+        });
+
+        /*
+         * Aktif buton
+         */
+        tabs.querySelectorAll(".mobile-tab").forEach(button => {
+
+            button.classList.toggle(
+                "active",
+                button.dataset.tab === tabName
+            );
+
+        });
+
+        /*
+         * Sayfanın ilgili bölümüne yumuşak dönüş
+         */
+        tabs.scrollIntoView({
+            behavior: "smooth",
+            block: "nearest"
+        });
+    }
+
+
+    /*
+     * Butonlara tıklama
+     */
+    tabs.querySelectorAll(".mobile-tab").forEach(button => {
+
+        button.addEventListener("click", () => {
+
+            showTab(button.dataset.tab);
+
+        });
+
+    });
+
+
+    /*
+     * Başlangıçta Genel sekmesi
+     */
+    showTab("general");
+
+
+    /*
+     * Masaüstünde hiçbir bölümü gizleme.
+     * Ekran tekrar büyürse eski PC görünümüne dön.
+     */
+    function checkScreenSize() {
+
+        const isMobile = window.matchMedia(
+            "(max-width: 760px)"
+        ).matches;
+
+        if (isMobile) {
+
+            tabs.style.display = "flex";
+
+            const activeButton =
+                tabs.querySelector(".mobile-tab.active");
+
+            showTab(
+                activeButton
+                    ? activeButton.dataset.tab
+                    : "general"
+            );
+
+        } else {
+
+            tabs.style.display = "none";
+
+            Object.values(sections).flat().forEach(section => {
+
+                if (!section) return;
+
+                section.classList.remove(
+                    "mobile-section-hidden",
+                    "mobile-section-visible"
+                );
+
+            });
+
+        }
+
+    }
+
+    window.addEventListener(
+        "resize",
+        checkScreenSize
+    );
+
+    checkScreenSize();
+
+}
+
+
+/*
+ * Sayfa tamamen hazır olduğunda çalıştır.
+ */
+if (document.readyState === "loading") {
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        setupMobileTabs
+    );
+
+} else {
+
+    setupMobileTabs();
+
+}
+```
+
+})();
