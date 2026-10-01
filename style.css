@@ -5783,3 +5783,10 @@ body.night .footer-text a:hover {
         max-width: 100%;
     }
 }
+
+
+@media (max-width: 760px) {
+    #weatherContent .mobile-section-hidden {
+        display: none !important;
+    }
+}
