@@ -5469,9 +5469,9 @@ body.night .footer-text a:hover {
    MOBILE FORECAST: WEATHER TIMELINE
 ========================================================= */
 @media (max-width: 760px) {
-    #weatherContent > .forecast-box.mobile-section-visible,
-    #weatherContent > .temperature-chart-box.mobile-section-visible,
-    #weatherContent > .hourly-box.mobile-section-visible {
+    #weatherContent .forecast-box.mobile-section-visible,
+    #weatherContent .temperature-chart-box.mobile-section-visible,
+    #weatherContent .hourly-box.mobile-section-visible {
         min-width: 0 !important;
         margin: 0 !important;
         padding: 15px 13px !important;
@@ -5485,30 +5485,30 @@ body.night .footer-text a:hover {
         transform: none !important;
     }
 
-    body.night #weatherContent > .forecast-box.mobile-section-visible,
-    body.night #weatherContent > .temperature-chart-box.mobile-section-visible,
-    body.night #weatherContent > .hourly-box.mobile-section-visible {
+    body.night #weatherContent .forecast-box.mobile-section-visible,
+    body.night #weatherContent .temperature-chart-box.mobile-section-visible,
+    body.night #weatherContent .hourly-box.mobile-section-visible {
         border-color: rgba(169, 211, 229, .12) !important;
         background: rgba(7, 23, 37, .52) !important;
         box-shadow: inset 0 1px 0 rgba(221, 241, 250, .045) !important;
     }
 
-    #weatherContent > .forecast-box .box-title,
-    #weatherContent > .temperature-chart-box .box-title,
-    #weatherContent > .hourly-box .box-title {
+    #weatherContent .forecast-box .box-title,
+    #weatherContent .temperature-chart-box .box-title,
+    #weatherContent .hourly-box .box-title {
         margin-bottom: 10px !important;
         color: #375865;
         font-size: 14px !important;
         line-height: 1.2;
     }
 
-    body.night #weatherContent > .forecast-box .box-title,
-    body.night #weatherContent > .temperature-chart-box .box-title,
-    body.night #weatherContent > .hourly-box .box-title {
+    body.night #weatherContent .forecast-box .box-title,
+    body.night #weatherContent .temperature-chart-box .box-title,
+    body.night #weatherContent .hourly-box .box-title {
         color: #c7dce4;
     }
 
-    #weatherContent > .forecast-box .forecast {
+    #weatherContent .forecast-box .forecast {
         position: relative;
         display: flex !important;
         flex-direction: column;
@@ -5520,7 +5520,7 @@ body.night .footer-text a:hover {
         scroll-snap-type: none;
     }
 
-    #weatherContent > .forecast-box .forecast::before {
+    #weatherContent .forecast-box .forecast::before {
         position: absolute;
         top: 24px;
         bottom: 24px;
@@ -5531,11 +5531,11 @@ body.night .footer-text a:hover {
         pointer-events: none;
     }
 
-    body.night #weatherContent > .forecast-box .forecast::before {
+    body.night #weatherContent .forecast-box .forecast::before {
         background: linear-gradient(180deg, transparent, rgba(111, 193, 213, .35) 10%, rgba(111, 193, 213, .17) 88%, transparent);
     }
 
-    #weatherContent > .forecast-box .forecast-day {
+    #weatherContent .forecast-box .forecast-day {
         position: relative;
         display: grid !important;
         grid-template-columns: 47px 30px minmax(0, 1fr) 34px 40px;
@@ -5557,24 +5557,24 @@ body.night .footer-text a:hover {
         transform: none !important;
     }
 
-    body.night #weatherContent > .forecast-box .forecast-day {
+    body.night #weatherContent .forecast-box .forecast-day {
         border-bottom-color: rgba(171, 205, 220, .1) !important;
     }
 
-    #weatherContent > .forecast-box .forecast-day:last-child {
+    #weatherContent .forecast-box .forecast-day:last-child {
         border-bottom: 0 !important;
     }
 
-    #weatherContent > .forecast-box .forecast-day:first-child {
+    #weatherContent .forecast-box .forecast-day:first-child {
         border-radius: 11px !important;
         background: linear-gradient(90deg, rgba(86, 177, 190, .14), rgba(86, 177, 190, .025) 72%, transparent) !important;
     }
 
-    body.night #weatherContent > .forecast-box .forecast-day:first-child {
+    body.night #weatherContent .forecast-box .forecast-day:first-child {
         background: linear-gradient(90deg, rgba(67, 150, 171, .2), rgba(67, 150, 171, .035) 72%, transparent) !important;
     }
 
-    #weatherContent > .forecast-box .forecast-day .day {
+    #weatherContent .forecast-box .forecast-day .day {
         min-width: 0;
         overflow: hidden;
         color: #647f89;
@@ -5584,20 +5584,20 @@ body.night .footer-text a:hover {
         white-space: nowrap;
     }
 
-    body.night #weatherContent > .forecast-box .forecast-day .day {
+    body.night #weatherContent .forecast-box .forecast-day .day {
         color: #a7bdc7;
     }
 
-    #weatherContent > .forecast-box .forecast-day:first-child .day {
+    #weatherContent .forecast-box .forecast-day:first-child .day {
         color: #176879;
         font-weight: 800;
     }
 
-    body.night #weatherContent > .forecast-box .forecast-day:first-child .day {
+    body.night #weatherContent .forecast-box .forecast-day:first-child .day {
         color: #a2e4eb;
     }
 
-    #weatherContent > .forecast-box .forecast-day .icon {
+    #weatherContent .forecast-box .forecast-day .icon {
         position: relative;
         z-index: 1;
         display: grid;
@@ -5612,12 +5612,12 @@ body.night .footer-text a:hover {
         line-height: 1;
     }
 
-    body.night #weatherContent > .forecast-box .forecast-day .icon {
+    body.night #weatherContent .forecast-box .forecast-day .icon {
         border-color: rgba(181, 217, 232, .14);
         background: rgba(17, 42, 58, .94);
     }
 
-    #weatherContent > .forecast-box .forecast-day .temp {
+    #weatherContent .forecast-box .forecast-day .temp {
         min-width: 0;
         overflow: hidden;
         color: #355460;
@@ -5628,12 +5628,12 @@ body.night .footer-text a:hover {
         white-space: nowrap;
     }
 
-    body.night #weatherContent > .forecast-box .forecast-day .temp {
+    body.night #weatherContent .forecast-box .forecast-day .temp {
         color: #d5e7ed;
     }
 
-    #weatherContent > .forecast-box .forecast-day .rain,
-    #weatherContent > .forecast-box .forecast-day .rain-sum {
+    #weatherContent .forecast-box .forecast-day .rain,
+    #weatherContent .forecast-box .forecast-day .rain-sum {
         min-width: 0;
         margin: 0 !important;
         overflow: hidden;
@@ -5645,12 +5645,12 @@ body.night .footer-text a:hover {
         white-space: nowrap;
     }
 
-    body.night #weatherContent > .forecast-box .forecast-day .rain,
-    body.night #weatherContent > .forecast-box .forecast-day .rain-sum {
+    body.night #weatherContent .forecast-box .forecast-day .rain,
+    body.night #weatherContent .forecast-box .forecast-day .rain-sum {
         color: #a9c0ca;
     }
 
-    #weatherContent > .hourly-box .hourly-forecast {
+    #weatherContent .hourly-box .hourly-forecast {
         display: flex !important;
         align-items: stretch;
         gap: 7px !important;
@@ -5666,7 +5666,7 @@ body.night .footer-text a:hover {
         scrollbar-color: rgba(79, 145, 162, .3) transparent;
     }
 
-    #weatherContent > .hourly-box .hourly-card {
+    #weatherContent .hourly-box .hourly-card {
         position: relative;
         display: flex !important;
         flex: 0 0 76px !important;
@@ -5687,22 +5687,22 @@ body.night .footer-text a:hover {
         transform: none !important;
     }
 
-    body.night #weatherContent > .hourly-box .hourly-card {
+    body.night #weatherContent .hourly-box .hourly-card {
         border-color: rgba(157, 199, 217, .12) !important;
         background: rgba(12, 34, 49, .56) !important;
     }
 
-    #weatherContent > .hourly-box .hourly-card:first-child {
+    #weatherContent .hourly-box .hourly-card:first-child {
         border-color: rgba(53, 145, 166, .29) !important;
         background: linear-gradient(180deg, rgba(88, 180, 191, .19), rgba(248, 251, 249, .54)) !important;
     }
 
-    body.night #weatherContent > .hourly-box .hourly-card:first-child {
+    body.night #weatherContent .hourly-box .hourly-card:first-child {
         border-color: rgba(105, 192, 210, .3) !important;
         background: linear-gradient(180deg, rgba(55, 137, 158, .24), rgba(11, 32, 47, .62)) !important;
     }
 
-    #weatherContent > .hourly-box .hourly-time {
+    #weatherContent .hourly-box .hourly-time {
         color: #57737e;
         font-size: 10px !important;
         font-weight: 750;
@@ -5710,17 +5710,17 @@ body.night .footer-text a:hover {
         white-space: nowrap;
     }
 
-    body.night #weatherContent > .hourly-box .hourly-time {
+    body.night #weatherContent .hourly-box .hourly-time {
         color: #bad0d8;
     }
 
-    #weatherContent > .hourly-box .hourly-icon {
+    #weatherContent .hourly-box .hourly-icon {
         margin: 5px 0 3px !important;
         font-size: 21px !important;
         line-height: 1;
     }
 
-    #weatherContent > .hourly-box .hourly-temp {
+    #weatherContent .hourly-box .hourly-temp {
         color: #294c5b;
         font-size: 15px !important;
         font-weight: 800;
@@ -5729,15 +5729,15 @@ body.night .footer-text a:hover {
         white-space: nowrap;
     }
 
-    body.night #weatherContent > .hourly-box .hourly-temp {
+    body.night #weatherContent .hourly-box .hourly-temp {
         color: #e1f0f4;
     }
 
-    #weatherContent > .hourly-box .hourly-feels,
-    #weatherContent > .hourly-box .hourly-rain-prob,
-    #weatherContent > .hourly-box .hourly-rain-amount,
-    #weatherContent > .hourly-box .hourly-wind,
-    #weatherContent > .hourly-box .hourly-wind-direction {
+    #weatherContent .hourly-box .hourly-feels,
+    #weatherContent .hourly-box .hourly-rain-prob,
+    #weatherContent .hourly-box .hourly-rain-amount,
+    #weatherContent .hourly-box .hourly-wind,
+    #weatherContent .hourly-box .hourly-wind-direction {
         width: 100%;
         margin-top: 1px !important;
         overflow: hidden;
@@ -5748,23 +5748,23 @@ body.night .footer-text a:hover {
         white-space: nowrap;
     }
 
-    body.night #weatherContent > .hourly-box .hourly-feels,
-    body.night #weatherContent > .hourly-box .hourly-rain-prob,
-    body.night #weatherContent > .hourly-box .hourly-rain-amount,
-    body.night #weatherContent > .hourly-box .hourly-wind,
-    body.night #weatherContent > .hourly-box .hourly-wind-direction {
+    body.night #weatherContent .hourly-box .hourly-feels,
+    body.night #weatherContent .hourly-box .hourly-rain-prob,
+    body.night #weatherContent .hourly-box .hourly-rain-amount,
+    body.night #weatherContent .hourly-box .hourly-wind,
+    body.night #weatherContent .hourly-box .hourly-wind-direction {
         color: #9fb6c0;
     }
 
-    #weatherContent > .temperature-chart-box.mobile-section-visible {
+    #weatherContent .temperature-chart-box.mobile-section-visible {
         padding: 13px 11px 10px !important;
     }
 
-    #weatherContent > .temperature-chart-box .box-title {
+    #weatherContent .temperature-chart-box .box-title {
         margin-bottom: 5px !important;
     }
 
-    #weatherContent > .temperature-chart-box .temperature-chart {
+    #weatherContent .temperature-chart-box .temperature-chart {
         width: 100% !important;
         min-width: 0 !important;
         margin: 0 !important;
@@ -5775,7 +5775,7 @@ body.night .footer-text a:hover {
         background: transparent !important;
     }
 
-    #weatherContent > .temperature-chart-box .temperature-chart svg {
+    #weatherContent .temperature-chart-box .temperature-chart svg {
         display: block;
         width: 100% !important;
         min-width: 0 !important;
