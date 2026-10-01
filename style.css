@@ -5790,3 +5790,14 @@ body.night .footer-text a:hover {
         display: none !important;
     }
 }
+
+
+@media (max-width: 760px) {
+    #weatherContent #weatherColorBox {
+        display: none !important;
+    }
+
+    #weatherContent:has(#mobileTabs .mobile-tab[data-tab="general"].active) #weatherColorBox {
+        display: block !important;
+    }
+}
