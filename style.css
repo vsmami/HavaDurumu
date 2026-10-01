@@ -4191,11 +4191,3 @@ body.night .footer-text a:hover {
         display: inline-block;
     }
 }
-@media (max-width: 760px) {
-    .main-grid > .current-box {
-        grid-template-columns: 1fr 1fr !important;
-        column-gap: 10px !important;
-        row-gap: 10px !important;
-        padding: 12px !important;
-    }
-}
